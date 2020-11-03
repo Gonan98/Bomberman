@@ -20,6 +20,7 @@ import javax.swing.Timer;
 
 import com.gonan.bomberman.entity.Bomb;
 import com.gonan.bomberman.entity.Player;
+import com.gonan.bomberman.scenario.Map;
 import com.gonan.bomberman.entity.Bomb.State;
 import com.gonan.bomberman.entity.BombExplosion;
 
@@ -35,8 +36,10 @@ public class GamePanel extends JPanel implements ActionListener {
 	private BufferedImage imgPlayer;
 	private BufferedImage imgBomb;
 	private BufferedImage imgExplosion;
+	private BufferedImage imgMap;
 	private final List<Bomb> bombs;
 	private final List<BombExplosion> bombExplosions;
+	private Map map;
 	private final Player player;
 	private final Timer timer; 
 
@@ -46,6 +49,7 @@ public class GamePanel extends JPanel implements ActionListener {
 			imgPlayer = ImageIO.read(new File("res/bomberman.png"));
 			imgBomb = ImageIO.read(new File("res/bomb.png"));
 			imgExplosion = ImageIO.read(new File("res/explosion.png"));
+			imgMap = ImageIO.read(new File("res/stage1_blocks.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,6 +58,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		player = new Player(imgPlayer, 4, 3, SCALE);
 		bombs = new ArrayList<>();
 		bombExplosions = new ArrayList<>();
+		map = new Map(imgMap, 15, 27, SCALE);
 		this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		this.setBackground(Color.BLACK);
 		this.setFocusable(true);
@@ -81,7 +86,7 @@ public class GamePanel extends JPanel implements ActionListener {
                     player.setDirection(Player.Direction.LEFT);
                     break;
                 case KeyEvent.VK_A:
-                	bombs.add(new Bomb(imgBomb, player.getX(), player.getY(), 1, 4, SCALE));
+                	bombs.add(new Bomb(imgBomb, player.getX(), player.getY() + player.getH() / 2, 1, 4, SCALE));
                 	break;
                 default:
                     break;
@@ -112,6 +117,7 @@ public class GamePanel extends JPanel implements ActionListener {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
+		map.draw((Graphics2D)g);
 		for (Bomb b : bombs) b.draw((Graphics2D)g);
 		for (BombExplosion be : bombExplosions) be.draw((Graphics2D)g);
 		player.draw((Graphics2D)g);
