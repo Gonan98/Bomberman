@@ -12,37 +12,39 @@ public class Player extends Image {
 	private boolean isMoving;
 	private Direction direction;
 
-	public Player(BufferedImage img, int rows, int columns, float scale) {
-		super(img, rows, columns, scale);
+	public Player(BufferedImage img, float posX, float posY, int rows, int columns, float scale) {
+		super(img, posX, posY, rows, columns, scale);
 		frameX = 0;
 		frameY = 2;
-		speed = 16;
+		speed = 12;
 		isMoving = false;
 	}
 	
 	@Override
 	public void draw(Graphics2D g2d) {
 		super.draw(g2d);
+		
+		//g2d.fillRect((int)x, (int)(y + h/2), (int)w, (int)(h/2));
 	}
 	
-	public void move() {
+	public void move(int[][] matrix) {
         if (isMoving) {
             switch (direction) {
                 case UP:
-                    y -= speed;
-                    frameY = 0;
+                	frameY = 0;
+	                y -= speed;
                     break;
                 case DOWN:
-                    y += speed;
-                    frameY = 2;
+                	frameY = 2;
+                	y += speed;
                     break;
                 case RIGHT:
-                    x += speed;
-                    frameY = 1;
+                	frameY = 1;
+                	x += speed;
                     break;
                 case LEFT:
-                    x -= speed;
-                    frameY = 3;
+                	frameY = 3;
+                	x -= speed;
                     break;
                 default:
                     break;
@@ -69,6 +71,5 @@ public class Player extends Image {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
-	
 	
 }

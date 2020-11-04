@@ -2,15 +2,14 @@ package com.gonan.bomberman.scenario;
 
 import java.awt.image.BufferedImage;
 
-import com.gonan.bomberman.graphic.Image;
+import com.gonan.bomberman.graphic.Tile;
 
-public class TileMap extends Image {
-	
+public class Block extends Tile {
+
 	private boolean isIndestructible;
 	
-	public TileMap(BufferedImage img, float posX, float posY, float frameX, float frameY, int rows, int columns,
-			float scale) {
-		super(img, posX, posY, frameX, frameY, rows, columns, scale);
+	public Block(BufferedImage image, float x, float y, int frameX, int frameY, int rows, int columns, float scale) {
+		super(image, x, y, frameX, frameY, rows, columns, scale);
 	}
 
 	public boolean isIndestructible() {

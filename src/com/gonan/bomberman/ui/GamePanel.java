@@ -30,6 +30,8 @@ public class GamePanel extends JPanel implements ActionListener {
 	
 	public static int PANEL_WIDTH = 1296;
 	public static int PANEL_HEIGHT = 720;
+	public static int UNIT_WIDTH = 27;
+	public static int UNIT_HEIGHT = 15;
 	public static float SCALE = 3f;
 	public static final int DELAY = 50;
 	
@@ -55,10 +57,10 @@ public class GamePanel extends JPanel implements ActionListener {
 		}
 		
 		timer = new Timer(DELAY, this);
-		player = new Player(imgPlayer, 4, 3, SCALE);
+		player = new Player(imgPlayer, 48, 0, 4, 3, SCALE);
 		bombs = new ArrayList<>();
 		bombExplosions = new ArrayList<>();
-		map = new Map(imgMap, 15, 27, SCALE);
+		map = new Map(imgMap, UNIT_HEIGHT, UNIT_WIDTH, SCALE);
 		this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		this.setBackground(Color.BLACK);
 		this.setFocusable(true);
@@ -86,7 +88,9 @@ public class GamePanel extends JPanel implements ActionListener {
                     player.setDirection(Player.Direction.LEFT);
                     break;
                 case KeyEvent.VK_A:
-                	bombs.add(new Bomb(imgBomb, player.getX(), player.getY() + player.getH() / 2, 1, 4, SCALE));
+                	float centralX = player.getX() + player.getW() / 2;
+                	float centralY = player.getY() + 3 * player.getH() / 4;
+                	bombs.add(new Bomb(imgBomb, (int)(centralX / player.getW()) * player.getW(), (int)(centralY / player.getW()) * player.getW(), 1, 4, SCALE));
                 	break;
                 default:
                     break;
@@ -136,7 +140,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		bombExplosions.removeIf(BombExplosion::isEnded);
 		
-		player.move();
+		player.move(map.getLayout());
 		repaint();
 	}
 }
