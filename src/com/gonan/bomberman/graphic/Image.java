@@ -83,6 +83,12 @@ public class Image {
 	public void draw(Graphics2D g2d) {
 		g2d.drawImage(frames[(int)frameY][(int)frameX], (int)x, (int)y, (int)w, (int)h, null);
 	}
+	
+	//public void draw(Graphics2D g2d, int[][] m) {
+	//	if (m[(int)(y / w)][(int)(x / w)] == 0) {
+	//		g2d.drawImage(frames[(int)frameY][(int)frameX], (int)x, (int)y, (int)w, (int)h, null);
+	//	}
+	//}
 
 	public float getFrameX() {
 		return frameX;

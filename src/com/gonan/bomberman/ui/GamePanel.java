@@ -123,7 +123,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		map.draw((Graphics2D)g);
 		for (Bomb b : bombs) b.draw((Graphics2D)g);
-		for (BombExplosion be : bombExplosions) be.draw((Graphics2D)g);
+		for (BombExplosion be : bombExplosions) be.draw((Graphics2D)g, map.getLayout());
 		player.draw((Graphics2D)g);
 	}
 

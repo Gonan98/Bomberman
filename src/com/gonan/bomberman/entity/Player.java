@@ -24,7 +24,8 @@ public class Player extends Image {
 	public void draw(Graphics2D g2d) {
 		super.draw(g2d);
 		
-		//g2d.fillRect((int)x, (int)(y + h/2), (int)w, (int)(h/2));
+		//g2d.fillRect((int)x, (int)(y + h/2), (int)(w), (int)(h/2 - speed));
+		//g2d.fillRect((int)x, (int)(y + h/2), (int)(w - speed), (int)(h/2));
 	}
 	
 	public void move(int[][] matrix) {
@@ -32,19 +33,27 @@ public class Player extends Image {
             switch (direction) {
                 case UP:
                 	frameY = 0;
-	                y -= speed;
+                	if (matrix[(int)((y + h/2 - speed) / w)][(int)(x / w)] == 0 && matrix[(int)((y + h/2 - speed) / w)][(int)((x + w - speed) / w)] == 0) {
+                		y -= speed;
+                	}
                     break;
                 case DOWN:
                 	frameY = 2;
-                	y += speed;
+                	if (matrix[(int)((y + h) / w)][(int)(x / w)] == 0 && matrix[(int)((y + h) / w)][(int)((x + w - speed) / w)] == 0) {
+                		y += speed;
+                	}
                     break;
                 case RIGHT:
                 	frameY = 1;
-                	x += speed;
+                	if (matrix[(int)((y + h/2) / w)][(int)((x + w) / w)] == 0 && matrix[(int)((y + h - speed) / w)][(int)((x + w) / w)] == 0) {
+                		x += speed;
+                	}
                     break;
                 case LEFT:
                 	frameY = 3;
-                	x -= speed;
+                	if (matrix[(int)((y + h/2) / w)][(int)((x - speed) / w)] == 0 && matrix[(int)((y + h - speed) / w)][(int)((x - speed) / w)] == 0) {
+                		x -= speed;
+                	}
                     break;
                 default:
                     break;
