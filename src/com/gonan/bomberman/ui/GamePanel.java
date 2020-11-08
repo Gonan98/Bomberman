@@ -19,10 +19,10 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import com.gonan.bomberman.entity.Bomb;
+import com.gonan.bomberman.entity.Explosion;
 import com.gonan.bomberman.entity.Player;
 import com.gonan.bomberman.scenario.Map;
 import com.gonan.bomberman.entity.Bomb.State;
-import com.gonan.bomberman.entity.BombExplosion;
 
 public class GamePanel extends JPanel implements ActionListener {
 
@@ -33,14 +33,14 @@ public class GamePanel extends JPanel implements ActionListener {
 	public static int UNIT_WIDTH = 27;
 	public static int UNIT_HEIGHT = 15;
 	public static float SCALE = 3f;
-	public static final int DELAY = 50;
+	public static final int DELAY = 30;
 	
 	private BufferedImage imgPlayer;
 	private BufferedImage imgBomb;
 	private BufferedImage imgExplosion;
 	private BufferedImage imgMap;
 	private final List<Bomb> bombs;
-	private final List<BombExplosion> bombExplosions;
+	private final List<Explosion> explosions;
 	private Map map;
 	private final Player player;
 	private final Timer timer; 
@@ -54,12 +54,13 @@ public class GamePanel extends JPanel implements ActionListener {
 			imgMap = ImageIO.read(new File("res/stage1_blocks.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 		
 		timer = new Timer(DELAY, this);
 		player = new Player(imgPlayer, 48, 0, 4, 3, SCALE);
 		bombs = new ArrayList<>();
-		bombExplosions = new ArrayList<>();
+		explosions = new ArrayList<>();
 		map = new Map(imgMap, UNIT_HEIGHT, UNIT_WIDTH, SCALE);
 		this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		this.setBackground(Color.BLACK);
@@ -70,6 +71,7 @@ public class GamePanel extends JPanel implements ActionListener {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
+				
 	            switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP:
                     player.setMoving(true);
@@ -120,10 +122,9 @@ public class GamePanel extends JPanel implements ActionListener {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
 		map.draw((Graphics2D)g);
 		for (Bomb b : bombs) b.draw((Graphics2D)g);
-		for (BombExplosion be : bombExplosions) be.draw((Graphics2D)g, map.getLayout());
+		for (Explosion expl : explosions) expl.draw((Graphics2D)g, map.getLayout());
 		player.draw((Graphics2D)g);
 	}
 
@@ -132,13 +133,13 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		for (Bomb b : bombs) {
 			if (b.getState() == State.EXPLODE) {
-				bombExplosions.add(new BombExplosion(imgExplosion, b.getX(), b.getY(), 6, 0, 5, 7, SCALE));
+				explosions.add(new Explosion(imgExplosion, b.getX(), b.getY(), 5, 7, SCALE));
 				bombs.remove(b);
 				break;
 			}
 		}
 		
-		bombExplosions.removeIf(BombExplosion::isEnded);
+		explosions.removeIf(Explosion::isEnded);
 		
 		player.move(map.getLayout());
 		repaint();

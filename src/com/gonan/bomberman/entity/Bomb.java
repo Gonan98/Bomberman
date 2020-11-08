@@ -3,9 +3,9 @@ package com.gonan.bomberman.entity;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import com.gonan.bomberman.graphic.Image;
+import com.gonan.bomberman.graphic.Sprite;
 
-public class Bomb extends Image {
+public class Bomb extends Sprite {
 
 	public enum State { ACTIVATED, EXPLODE }
 	
@@ -15,7 +15,10 @@ public class Bomb extends Image {
 	
 	public Bomb(BufferedImage img, float posX, float posY, int rows, int columns, float scale) {
 		super(img, posX, posY, rows, columns, scale);
-		frameSpeed = 0.4f;
+		frameX = 0;
+		frameY = 0;
+		frameSpeed = 0.2f;
+		state = State.ACTIVATED;
 	}
 
 	@Override

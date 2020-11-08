@@ -10,13 +10,19 @@ public class Tile {
 	private float y;
 	private final float w;
 	private final float h;
+
+	public Tile(BufferedImage image, int frameX, int frameY, int rows, int columns, float scale) {
+		this.image = image.getSubimage(frameX * image.getWidth() / columns, frameY * image.getHeight() / rows, image.getWidth() / columns, image.getHeight() / rows);
+		this.w = (float)image.getWidth() / columns * scale;
+		this.h = (float)image.getHeight() / rows * scale;
+	}
 	
 	public Tile(BufferedImage image, float x, float y, int frameX, int frameY, int rows, int columns, float scale) {
 		this.image = image.getSubimage(frameX * image.getWidth() / columns, frameY * image.getHeight() / rows, image.getWidth() / columns, image.getHeight() / rows);
 		this.x = x;
 		this.y = y;
-		this.w = image.getWidth() / columns * scale;
-		this.h = image.getHeight() / rows * scale;
+		this.w = (float)image.getWidth() / columns * scale;
+		this.h = (float)image.getHeight() / rows * scale;
 	}
 	
 	public void draw(Graphics2D g2d) {

@@ -3,9 +3,9 @@ package com.gonan.bomberman.entity;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import com.gonan.bomberman.graphic.Image;
+import com.gonan.bomberman.graphic.Sprite;
 
-public class Player extends Image {
+public class Player extends Sprite {
 	
 	public enum Direction { UP, DOWN, RIGHT, LEFT }
 	
@@ -16,7 +16,8 @@ public class Player extends Image {
 		super(img, posX, posY, rows, columns, scale);
 		frameX = 0;
 		frameY = 2;
-		speed = 12;
+		speed = 8;
+		frameSpeed = 0.2f;
 		isMoving = false;
 	}
 	
@@ -35,25 +36,41 @@ public class Player extends Image {
                 	frameY = 0;
                 	if (matrix[(int)((y + h/2 - speed) / w)][(int)(x / w)] == 0 && matrix[(int)((y + h/2 - speed) / w)][(int)((x + w - speed) / w)] == 0) {
                 		y -= speed;
-                	}
+                	} else if (matrix[(int)((y + h/2 - speed) / w)][(int)(x / w)] == 0) {
+                		x -= speed;
+					} else if (matrix[(int)((y + h/2 - speed) / w)][(int)((x + w - speed) / w)] == 0) {
+                		x += speed;
+					}
                     break;
                 case DOWN:
                 	frameY = 2;
                 	if (matrix[(int)((y + h) / w)][(int)(x / w)] == 0 && matrix[(int)((y + h) / w)][(int)((x + w - speed) / w)] == 0) {
                 		y += speed;
-                	}
+                	} else if (matrix[(int)((y + h) / w)][(int)(x / w)] == 0) {
+                		x -= speed;
+					} else if (matrix[(int)((y + h) / w)][(int)((x + w - speed) / w)] == 0) {
+                		x += speed;
+					}
                     break;
                 case RIGHT:
                 	frameY = 1;
                 	if (matrix[(int)((y + h/2) / w)][(int)((x + w) / w)] == 0 && matrix[(int)((y + h - speed) / w)][(int)((x + w) / w)] == 0) {
                 		x += speed;
-                	}
+                	} else if (matrix[(int)((y + h/2) / w)][(int)((x + w) / w)] == 0) {
+                		y -= speed;
+					} else if (matrix[(int)((y + h - speed) / w)][(int)((x + w) / w)] == 0) {
+						y += speed;
+					}
                     break;
                 case LEFT:
                 	frameY = 3;
                 	if (matrix[(int)((y + h/2) / w)][(int)((x - speed) / w)] == 0 && matrix[(int)((y + h - speed) / w)][(int)((x - speed) / w)] == 0) {
                 		x -= speed;
-                	}
+                	} else if (matrix[(int)((y + h/2) / w)][(int)((x - speed) / w)] == 0) {
+                		y -= speed;
+					} else if (matrix[(int)((y + h - speed) / w)][(int)((x - speed) / w)] == 0) {
+                		y += speed;
+					}
                     break;
                 default:
                     break;
