@@ -11,18 +11,17 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import com.gonan.bomberman.collection.BombList;
+import com.gonan.bomberman.collection.ExplosionList;
 import com.gonan.bomberman.entity.Bomb;
 import com.gonan.bomberman.entity.Explosion;
 import com.gonan.bomberman.entity.Player;
 import com.gonan.bomberman.scenario.Map;
-import com.gonan.bomberman.entity.Bomb.State;
 
 public class GamePanel extends JPanel implements ActionListener {
 
@@ -39,11 +38,12 @@ public class GamePanel extends JPanel implements ActionListener {
 	private BufferedImage imgBomb;
 	private BufferedImage imgExplosion;
 	private BufferedImage imgMap;
-	private final List<Bomb> bombs;
-	private final List<Explosion> explosions;
-	private Map map;
+	private BufferedImage imgEnemy;
+	private final BombList bombList;
+	private final ExplosionList explosionList;
+	private final Map map;
 	private final Player player;
-	private final Timer timer; 
+	private Timer timer;
 
 	public GamePanel() {
 		
@@ -52,6 +52,7 @@ public class GamePanel extends JPanel implements ActionListener {
 			imgBomb = ImageIO.read(new File("res/bomb.png"));
 			imgExplosion = ImageIO.read(new File("res/explosion.png"));
 			imgMap = ImageIO.read(new File("res/stage1_blocks.png"));
+			imgEnemy = ImageIO.read(new File("res/enemy_coin.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -59,9 +60,9 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		timer = new Timer(DELAY, this);
 		player = new Player(imgPlayer, 48, 0, 4, 3, SCALE);
-		bombs = new ArrayList<>();
-		explosions = new ArrayList<>();
-		map = new Map(imgMap, UNIT_HEIGHT, UNIT_WIDTH, SCALE);
+		bombList = new BombList();
+		explosionList = new ExplosionList();
+		map = new Map(imgMap, imgEnemy, UNIT_HEIGHT, UNIT_WIDTH, SCALE);
 		this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		this.setBackground(Color.BLACK);
 		this.setFocusable(true);
@@ -92,7 +93,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 case KeyEvent.VK_A:
                 	float centralX = player.getX() + player.getW() / 2;
                 	float centralY = player.getY() + 3 * player.getH() / 4;
-                	bombs.add(new Bomb(imgBomb, (int)(centralX / player.getW()) * player.getW(), (int)(centralY / player.getW()) * player.getW(), 1, 4, SCALE));
+                	bombList.add(new Bomb(imgBomb, (int)(centralX / player.getW()) * player.getW(), (int)(centralY / player.getW()) * player.getW(), 1, 4, SCALE));
                 	break;
                 default:
                     break;
@@ -123,25 +124,41 @@ public class GamePanel extends JPanel implements ActionListener {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		map.draw((Graphics2D)g);
-		for (Bomb b : bombs) b.draw((Graphics2D)g);
-		for (Explosion expl : explosions) expl.draw((Graphics2D)g, map.getLayout());
+		bombList.draw((Graphics2D)g);
+		explosionList.draw((Graphics2D)g, map.getLayout());
+		map.drawEnemies((Graphics2D)g);
 		player.draw((Graphics2D)g);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		for (Bomb b : bombs) {
-			if (b.getState() == State.EXPLODE) {
-				explosions.add(new Explosion(imgExplosion, b.getX(), b.getY(), 5, 7, SCALE));
-				bombs.remove(b);
+
+		map.updateEnemies();
+
+		for (var b : bombList.getBombs()) {
+			if (b.getState() == Bomb.State.EXPLODE) {
+				explosionList.add(new Explosion(imgExplosion, b.getX(), b.getY(), 5, 7, SCALE));
+				bombList.remove(b);
 				break;
 			}
 		}
+
+		explosionBlockCollision();
 		
-		explosions.removeIf(Explosion::isEnded);
+		explosionList.removeIfExplosionEnded();
 		
 		player.move(map.getLayout());
 		repaint();
+	}
+
+	public void explosionBlockCollision() {
+		for (var block : map.getTileList().getTiles()) {
+			for (var sprite : explosionList.getExplosions()) {
+				if (block.getX() == sprite.getX() && block.getY() == sprite.getY()) {
+					map.getTileList().remove(block);
+					return;
+				}
+			}
+		}
 	}
 }

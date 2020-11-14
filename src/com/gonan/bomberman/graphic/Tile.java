@@ -29,6 +29,11 @@ public class Tile {
 		g2d.drawImage(image, (int)x, (int)y, (int)w, (int)h, null);
 	}
 
+	public void setPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+
 	public float getX() {
 		return x;
 	}

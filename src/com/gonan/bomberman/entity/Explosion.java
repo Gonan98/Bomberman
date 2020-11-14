@@ -31,11 +31,11 @@ public class Explosion extends Sprite {
 		south.setFrame(1,0);
 		sideExplosions.add(south);
 		// Este
-		Sprite east = new Sprite(img,x + w,y,rows,columns,scale);
+		Sprite east = new Sprite(img,x+w,y,rows,columns,scale);
 		east.setFrame(3,0);
 		sideExplosions.add(east);
 		// Oeste
-		Sprite west = new Sprite(img,x - w,y,rows,columns,scale);
+		Sprite west = new Sprite(img,x-w,y,rows,columns,scale);
 		west.setFrame(2,0);
 		sideExplosions.add(west);
 	}
@@ -53,9 +53,13 @@ public class Explosion extends Sprite {
 		for (Sprite sprite : sideExplosions) {
 			if (m[(int)(sprite.getY()/48)][(int)(sprite.getX()/48)] != 1) {
 				sprite.draw(g2d);
-				m[(int)(sprite.getY()/48)][(int)(sprite.getX()/48)] = 0;
+				if (m[(int)(sprite.getY()/48)][(int)(sprite.getX()/48)] == 2) m[(int)(sprite.getY()/48)][(int)(sprite.getX()/48)] = 0;
 			}
 		}
+	}
+
+	public void drawSideExplosion(Graphics2D g2d) {
+		for (Sprite sprite : sideExplosions) sprite.draw(g2d);
 	}
 
 	private void update() {
@@ -64,7 +68,11 @@ public class Explosion extends Sprite {
 			sprite.setFrameY(sprite.getFrameY() + frameSpeed);
 		}
 	}
-	
+
+	public List<Sprite> getSideExplosions() {
+		return sideExplosions;
+	}
+
 	public boolean isEnded() {
 		return frameY >= 4;
 	}

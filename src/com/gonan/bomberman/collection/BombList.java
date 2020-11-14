@@ -3,7 +3,6 @@ package com.gonan.bomberman.collection;
 import com.gonan.bomberman.entity.Bomb;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +20,21 @@ public class BombList {
         capacity++;
     }
 
-    public void add(BufferedImage imgBomb, float posX, float posY, float scale) {
+    public void add(Bomb b) {
         if (bombs.size() < capacity) {
-            bombs.add(new Bomb(imgBomb, posX, posY, 5,7, scale));
+            bombs.add(b);
         }
+    }
+
+    public void remove(Bomb b) {
+        bombs.remove(b);
     }
 
     public void draw(Graphics2D g2d) {
         for (Bomb b : bombs) b.draw(g2d);
+    }
+
+    public List<Bomb> getBombs() {
+        return bombs;
     }
 }

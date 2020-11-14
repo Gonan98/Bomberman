@@ -41,12 +41,6 @@ public class Sprite {
 		g2d.drawImage(currentFrame(), (int)x, (int)y, (int)w, (int)h, null);
 	}
 
-	//public void draw(Graphics2D g2d, int[][] m) {
-	//	if (m[(int)(y/48)][(int)(x/48)] != 1) {
-	//		g2d.drawImage(currentFrame(), (int)x, (int)y, (int)w, (int)h, null);
-	//	}
-	//}
-
 	public int getRows() {
 		return rows;
 	}
