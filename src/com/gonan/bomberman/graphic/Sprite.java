@@ -1,5 +1,7 @@
 package com.gonan.bomberman.graphic;
 
+import com.gonan.bomberman.entity.Hitbox;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -13,12 +15,13 @@ public class Sprite {
 	protected final float frameH;
 	protected float frameSpeed;
 	protected final BufferedImage texture;
-	
+
 	protected float x;
 	protected float y;
 	protected final float w;
 	protected final float h;
 	protected float speed;
+	protected Hitbox hitbox;
 
 	public Sprite(BufferedImage texture, float posX, float posY, int rows, int columns, float scale) {
 		this.texture = texture;
@@ -112,5 +115,9 @@ public class Sprite {
 
 	public float getH() {
 		return h;
+	}
+
+	public Hitbox getHitbox() {
+		return hitbox;
 	}
 }

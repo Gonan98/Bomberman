@@ -1,6 +1,5 @@
 package com.gonan.bomberman.collection;
 
-import com.gonan.bomberman.entity.Bomb;
 import com.gonan.bomberman.entity.Explosion;
 
 import java.awt.*;

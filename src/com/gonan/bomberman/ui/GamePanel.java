@@ -26,14 +26,14 @@ import com.gonan.bomberman.scenario.Map;
 public class GamePanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public static int PANEL_WIDTH = 1296;
 	public static int PANEL_HEIGHT = 720;
 	public static int UNIT_WIDTH = 27;
 	public static int UNIT_HEIGHT = 15;
 	public static float SCALE = 3f;
 	public static final int DELAY = 30;
-	
+
 	private BufferedImage imgPlayer;
 	private BufferedImage imgBomb;
 	private BufferedImage imgExplosion;
@@ -43,10 +43,12 @@ public class GamePanel extends JPanel implements ActionListener {
 	private final ExplosionList explosionList;
 	private final Map map;
 	private final Player player;
-	private Timer timer;
+	private final Timer timer;
+
+	private boolean running;
 
 	public GamePanel() {
-		
+
 		try {
 			imgPlayer = ImageIO.read(new File("res/bomberman.png"));
 			imgBomb = ImageIO.read(new File("res/bomb.png"));
@@ -57,7 +59,7 @@ public class GamePanel extends JPanel implements ActionListener {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
+
 		timer = new Timer(DELAY, this);
 		player = new Player(imgPlayer, 48, 0, 4, 3, SCALE);
 		bombList = new BombList();
@@ -66,13 +68,13 @@ public class GamePanel extends JPanel implements ActionListener {
 		this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		this.setBackground(Color.BLACK);
 		this.setFocusable(true);
-		
+
 		this.addKeyListener(new KeyAdapter() {
-			
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
-				
+
 	            switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP:
                     player.setMoving(true);
@@ -99,7 +101,7 @@ public class GamePanel extends JPanel implements ActionListener {
                     break;
 	            }
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent e) {
 				super.keyReleased(e);
@@ -114,12 +116,14 @@ public class GamePanel extends JPanel implements ActionListener {
                     break;
 	            }
 			}
-			
+
 		});
-		
+
+		running = true;
+
 		timer.start();
 	}
-	
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -133,32 +137,42 @@ public class GamePanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		map.updateEnemies();
+		if (running) {
+			map.updateEnemies();
 
-		for (var b : bombList.getBombs()) {
-			if (b.getState() == Bomb.State.EXPLODE) {
-				explosionList.add(new Explosion(imgExplosion, b.getX(), b.getY(), 5, 7, SCALE));
-				bombList.remove(b);
-				break;
-			}
-		}
-
-		explosionBlockCollision();
-		
-		explosionList.removeIfExplosionEnded();
-		
-		player.move(map.getLayout());
-		repaint();
-	}
-
-	public void explosionBlockCollision() {
-		for (var block : map.getTileList().getTiles()) {
-			for (var sprite : explosionList.getExplosions()) {
-				if (block.getX() == sprite.getX() && block.getY() == sprite.getY()) {
-					map.getTileList().remove(block);
-					return;
+			for (var b : bombList.getBombs()) {
+				if (b.getState() == Bomb.State.EXPLODE) {
+					explosionList.add(new Explosion(imgExplosion, b.getX(), b.getY(), 5, 7, SCALE));
+					bombList.remove(b);
+					break;
 				}
 			}
+
+			//explosionBlockCollision();
+
+			explosionList.removeIfExplosionEnded();
+
+			for (var enemy : map.getEnemyList().getEnemies()) {
+				if (player.getHitbox().intersect(enemy.getHitbox())) running = false;
+			}
+
+			for (var explosion : explosionList.getExplosions()) {
+				if (player.getHitbox().intersect(explosion.getHitbox())) running = false;
+			}
+
+			for (var explosion : explosionList.getExplosions()) {
+				for (var enemy : map.getEnemyList().getEnemies()) {
+					if (explosion.getHitbox().intersect(enemy.getHitbox())) {
+						map.getEnemyList().remove(enemy);
+						break;
+					}
+				}
+			}
+
+			player.move(map.getLayout());
+			repaint();
+		} else {
+			timer.stop();
 		}
 	}
 }

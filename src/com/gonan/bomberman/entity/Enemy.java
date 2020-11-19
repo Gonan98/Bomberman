@@ -10,7 +10,6 @@ public class Enemy extends Sprite  {
 
     enum Direction { UP, DOWN, RIGHT, LEFT }
 
-    private int lifes;
     private Direction direction;
 
     public Enemy(BufferedImage texture, float posX, float posY, int rows, int columns, float scale) {
@@ -18,8 +17,8 @@ public class Enemy extends Sprite  {
         this.frameX = 0;
         this.frameY = 0;
         this.frameSpeed = 0.2f;
-        this.lifes = 1;
         this.speed = 3;
+        hitbox = new Hitbox(x, y + 3 * h / 4, w, h / 4);
         setRandomDirection();
     }
 
@@ -46,6 +45,7 @@ public class Enemy extends Sprite  {
     @Override
     public void draw(Graphics2D g2d) {
         super.draw(g2d);
+        hitbox.draw(g2d);
         //g2d.fillRect((int)x, (int)(y + speed), (int)(w), (int)(h - speed));
         //g2d.fillRect((int)(x + speed), (int)y, (int)(w - speed), (int)h);
     }
@@ -83,6 +83,8 @@ public class Enemy extends Sprite  {
             default:
                 break;
         }
+        hitbox.x = x;
+        hitbox.y = y + 3 * h / 4;
         frameX += frameSpeed;
         if (frameX > 11) frameX = 0;
     }

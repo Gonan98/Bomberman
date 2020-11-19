@@ -19,12 +19,13 @@ public class Player extends Sprite {
 		speed = 8;
 		frameSpeed = 0.2f;
 		isMoving = false;
+		hitbox = new Hitbox(x + 8, y + 3 * h / 4, w - 16, h / 4 - 8);
 	}
 	
 	@Override
 	public void draw(Graphics2D g2d) {
 		super.draw(g2d);
-
+		hitbox.draw(g2d);
 		//g2d.fillRect((int)x, (int)(y + h/2), (int)w, (int)(h/2));
 		//g2d.fillRect((int)x, (int)(y + h/2), (int)(w), (int)(h/2 - speed));
 		//g2d.fillRect((int)x, (int)(y + h/2), (int)(w - speed), (int)(h/2));
@@ -38,7 +39,6 @@ public class Player extends Sprite {
                 case UP:
                 	frameY = 0;
                 	if (m[(int)((yCenter - speed) / hCenter)][(int)(x / w)] == 0 && m[(int)((yCenter - speed) / hCenter)][(int)((x + w - speed) / w)] == 0) {
-                	//if (matrix[(int)((y + h/2 - speed) / w)][(int)(x / w)] == 0 && matrix[(int)((y + h/2 - speed) / w)][(int)((x + w - speed) / w)] == 0) {
                 		y -= speed;
                 	} else if (m[(int)((yCenter - speed) / hCenter)][(int)(x / w)] == 0) {
                 		x -= speed;
@@ -49,7 +49,6 @@ public class Player extends Sprite {
                 case DOWN:
                 	frameY = 2;
 					if (m[(yCenter + hCenter) / hCenter][(int)(x / w)] == 0 && m[(yCenter + hCenter) / hCenter][(int)((x + w - speed) / w)] == 0) {
-                	//if (matrix[(int)((y + h) / w)][(int)(x / w)] == 0 && matrix[(int)((y + h) / w)][(int)((x + w - speed) / w)] == 0) {
                 		y += speed;
                 	} else if (m[(yCenter + hCenter) / hCenter][(int)(x / w)] == 0) {
                 		x -= speed;
@@ -60,7 +59,6 @@ public class Player extends Sprite {
                 case RIGHT:
                 	frameY = 1;
                 	if (m[(yCenter / hCenter)][(int)((x + w) / w)] == 0 && m[(int)((yCenter + hCenter - speed) / hCenter)][(int)((x + w) / w)] == 0) {
-                	//if (matrix[(int)((y + h/2) / w)][(int)((x + w) / w)] == 0 && matrix[(int)((y + h - speed) / w)][(int)((x + w) / w)] == 0) {
                 		x += speed;
                 	} else if (m[(yCenter / hCenter)][(int)((x + w) / w)] == 0) {
                 		y -= speed;
@@ -71,7 +69,6 @@ public class Player extends Sprite {
                 case LEFT:
                 	frameY = 3;
 					if (m[(yCenter / hCenter)][(int)((x - speed) / w)] == 0 && m[(int)((yCenter + hCenter - speed) / hCenter)][(int)((x - speed) / w)] == 0) {
-                	//if (matrix[(int)((y + h/2) / w)][(int)((x - speed) / w)] == 0 && matrix[(int)((y + h - speed) / w)][(int)((x - speed) / w)] == 0) {
                 		x -= speed;
                 	} else if (m[(yCenter / hCenter)][(int)((x - speed) / w)] == 0) {
                 		y -= speed;
@@ -82,6 +79,8 @@ public class Player extends Sprite {
                 default:
                     break;
             }
+            hitbox.x = x + 8;
+            hitbox.y = y + 3 * h / 4;
             frameX += frameSpeed;
             if (frameX >= 3) frameX = 0;
         } else {

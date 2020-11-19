@@ -19,12 +19,13 @@ public class Explosion extends Sprite {
 		frameX = 6;
 		frameY = 0;
 		frameSpeed = 0.5f;
-
+		hitbox = new Hitbox(x,y,w,h);
 		sideExplosions = new ArrayList<>();
 
 		// Norte
 		Sprite north = new Sprite(img,x,y-h,rows,columns,scale);
 		north.setFrame(0,0);
+
 		sideExplosions.add(north);
 		// Sur
 		Sprite south = new Sprite(img,x,y+h,rows,columns,scale);

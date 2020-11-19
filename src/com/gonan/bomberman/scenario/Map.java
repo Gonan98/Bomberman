@@ -120,4 +120,8 @@ public class Map {
 	public void setLayoutObject(float x, float y, int o) {
 		layout[(int)(y / 48)][(int)(x / 48)] = o;
 	}
+
+	public EnemyList getEnemyList() {
+		return enemyList;
+	}
 }
