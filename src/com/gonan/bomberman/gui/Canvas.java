@@ -20,6 +20,7 @@ public class Canvas extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
 	private Texture playerTexture;
+	private Texture bombTexture;
 	private Bomber player;
 	private MyKeyAdapter myKeyAdapter;
 	private Timer timer;
@@ -30,7 +31,8 @@ public class Canvas extends JPanel implements ActionListener {
 		this.setBackground(Color.BLACK);
 		
 		this.playerTexture = new Texture("res/bomberman_spritesheet.png");
-		this.player = new Bomber(playerTexture, 0, 0);
+		this.bombTexture = new Texture("res/bomberman_bomb.png");
+		this.player = new Bomber(playerTexture, bombTexture, 0, 0);
 		this.timer = new Timer((int)(1000 / GameConfig.FPS), this);
 		this.myKeyAdapter = new MyKeyAdapter(player);
 		this.addKeyListener(myKeyAdapter);
@@ -42,7 +44,6 @@ public class Canvas extends JPanel implements ActionListener {
 	
 	@Override
 	protected void paintComponent(Graphics g) {
-		// TODO Auto-generated method stub
 		super.paintComponent(g);
 		player.render((Graphics2D)g);
 	}

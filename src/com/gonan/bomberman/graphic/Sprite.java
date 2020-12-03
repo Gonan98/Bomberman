@@ -15,20 +15,20 @@ public class Sprite {
 	private Texture texture;
 	private Region region;
 	
-	public Sprite(Texture texture) {
+	public Sprite(Texture texture, float x, float y) {
 		this.texture = texture;
 		this.region = new Region(0, 0, texture.getWidth(), texture.getHeight());
-		this.x = 0;
-		this.y = 0;
+		this.x = x;
+		this.y = y;
 		this.w = region.getWidth() * GameConfig.scale;
 		this.h = region.getHeight() * GameConfig.scale;
 	}
 	
-	public Sprite(Texture texture, Region region) {
+	public Sprite(Texture texture, Region region, float x, float y) {
 		this.texture = texture;
 		this.region = region;
-		this.x = 0;
-		this.y = 0;
+		this.x = x;
+		this.y = y;
 		this.w = region.getWidth() * GameConfig.scale;
 		this.h = region.getHeight() * GameConfig.scale;
 	}

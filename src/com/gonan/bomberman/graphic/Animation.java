@@ -26,7 +26,7 @@ public class Animation {
 	
 	public void update() {
 		jPos += speed;
-		if (jPos > regions[0].length) jPos = 0;
+		if (jPos > regions[0].length || jPos < 0) jPos = 0;
 	}
 	
 	public Region getCurrentRegion() {
@@ -71,6 +71,10 @@ public class Animation {
 
 	public void setjPos(float jPos) {
 		this.jPos = jPos;
+	}
+
+	public boolean isLastFrame() {
+		return jPos >= regions[0].length;
 	}
 
 }

@@ -39,6 +39,10 @@ public class MyKeyAdapter extends KeyAdapter {
             bomber.setDirection(Direction.LEFT);
             break;
 
+        case KeyEvent.VK_A:
+            bomber.putBomb();
+            break;
+
         default:
             break;
     }
