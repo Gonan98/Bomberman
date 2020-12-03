@@ -1,96 +1,49 @@
 package com.gonan.bomberman.graphic;
 
-import com.gonan.bomberman.entity.Hitbox;
-
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import com.gonan.bomberman.util.GameConfig;
+import com.gonan.bomberman.util.Region;
+
 public class Sprite {
 	
-	protected final int rows;
-	protected final int columns;
-	protected float frameX;
-	protected float frameY;
-	protected final float frameW;
-	protected final float frameH;
-	protected float frameSpeed;
-	protected final BufferedImage texture;
-
-	protected float x;
-	protected float y;
-	protected final float w;
-	protected final float h;
-	protected float speed;
-	protected Hitbox hitbox;
-
-	public Sprite(BufferedImage texture, float posX, float posY, int rows, int columns, float scale) {
+	private float x;
+	private float y;
+	private float w;
+	private float h;
+	private Texture texture;
+	private Region region;
+	
+	public Sprite(Texture texture) {
 		this.texture = texture;
-		this.rows = rows;
-		this.columns = columns;
-		this.frameW = (float)(texture.getWidth() / columns);
-		this.frameH = (float)(texture.getHeight() / rows);
-
-		this.x = posX;
-		this.y = posY;
-		this.w = frameW * scale;
-		this.h = frameH * scale;
-	}
-
-	private BufferedImage currentFrame() {
-		return texture.getSubimage((int)frameX * (int)frameW,(int)frameY * (int)frameH,(int)frameW,(int)frameH);
+		this.region = new Region(0, 0, texture.getWidth(), texture.getHeight());
+		this.x = 0;
+		this.y = 0;
+		this.w = region.getWidth() * GameConfig.scale;
+		this.h = region.getHeight() * GameConfig.scale;
 	}
 	
-	public void draw(Graphics2D g2d) {
-		g2d.drawImage(currentFrame(), (int)x, (int)y, (int)w, (int)h, null);
+	public Sprite(Texture texture, Region region) {
+		this.texture = texture;
+		this.region = region;
+		this.x = 0;
+		this.y = 0;
+		this.w = region.getWidth() * GameConfig.scale;
+		this.h = region.getHeight() * GameConfig.scale;
 	}
-
-	public int getRows() {
-		return rows;
+	
+	public BufferedImage getCurrentImage() {
+		return texture.getImage().getSubimage(region.getX(), region.getY(), region.getWidth(), region.getHeight());
 	}
-
-	public int getColumns() {
-		return columns;
+	
+	public void move(float xOffSet, float yOffSet) {
+		this.x += xOffSet;
+		this.y += yOffSet;
 	}
-
-	public float getFrameX() {
-		return frameX;
-	}
-
-	public void setFrameX(float frameX) {
-		this.frameX = frameX;
-	}
-
-	public float getFrameY() {
-		return frameY;
-	}
-
-	public void setFrameY(float frameY) {
-		this.frameY = frameY;
-	}
-
-	public void setFrame(float frameX, float frameY) {
-		this.frameX = frameX;
-		this.frameY = frameY;
-	}
-
-	public float getFrameW() {
-		return frameW;
-	}
-
-	public float getFrameH() {
-		return frameH;
-	}
-
-	public float getFrameSpeed() {
-		return frameSpeed;
-	}
-
-	public void setFrameSpeed(float frameSpeed) {
-		this.frameSpeed = frameSpeed;
-	}
-
-	public BufferedImage getTexture() {
-		return texture;
+	
+	public void render(Graphics2D g) {
+		g.drawImage(getCurrentImage(), (int)x, (int)y, (int)w, (int)h, null);
 	}
 
 	public float getX() {
@@ -113,11 +66,32 @@ public class Sprite {
 		return w;
 	}
 
+	public void setW(float w) {
+		this.w = w;
+	}
+
 	public float getH() {
 		return h;
 	}
 
-	public Hitbox getHitbox() {
-		return hitbox;
+	public void setH(float h) {
+		this.h = h;
 	}
+
+	public Texture getTexture() {
+		return texture;
+	}
+
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+
+	public Region getRegion() {
+		return region;
+	}
+
+	public void setRegion(Region drawRegion) {
+		this.region = drawRegion;
+	}
+
 }
