@@ -13,27 +13,39 @@ public class Bomb extends Entity {
 	
 	private int timeToExplode;
 	private BombState state;
+	private Explosion explosion;
 	
-	public Bomb(Texture texture, float x, float y) {
-		this.sprite = new Sprite(texture, new Region(0, 0, 16, 16), x, y);
+	public Bomb(Texture bombTexture, Texture explosionTexture, float x, float y) {
+		this.explosion = new Explosion(explosionTexture, x, y);
+		this.sprite = new Sprite(bombTexture, new Region(0, 0, 16, 16), x, y);
 		this.animation = new Animation(16, 16, 1, 3, 0.1f);
-		this.timeToExplode = 3;
+		this.timeToExplode = 2;
 		this.state = BombState.ACTIVE;
 	}
 
 	@Override
 	public void render(Graphics2D g) {
-		sprite.render(g);
+		if (state == BombState.ACTIVE) {
+			sprite.render(g);
+		} else {
+			explosion.render(g);
+		}
 	}
 
 	@Override
 	public void update() {
-		animation.update();
-		sprite.setRegion(animation.getCurrentRegion());
-		if (animation.getjPos() == 0) {
-			timeToExplode--;
+		if (state == BombState.ACTIVE) {
+			animation.update();
+			if(animation.isLastFrame()) animation.restart();
+			sprite.setRegion(animation.getCurrentRegion());
+			if (animation.getjPos() == 0) {
+				timeToExplode--;
+				if (timeToExplode == 0) state = BombState.EXPLODING;
+			}
+		} else {
+			explosion.update();
+			if (explosion.getAnimation().isLastFrame()) state = BombState.EXTICNT;
 		}
-		// if (timeToExplode == 0) state = BombState.EXPLODING;
 	}
 
 	public BombState getState() {

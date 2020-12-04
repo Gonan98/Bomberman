@@ -7,15 +7,15 @@ public class Animation {
 	private Region[][] regions;
 	private float iPos;
 	private float jPos;
-	private int frames;
 	private float speed;
+	private int limit;
 	
 	public Animation(int frameWidth, int frameHeight, int rows, int columns, float speed) {
-		this.frames = rows * columns;
 		this.regions = new Region[rows][columns];
 		this.speed = speed;
 		this.iPos = 0;		
 		this.jPos = 0;
+		this.limit = columns;
 		
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
@@ -26,11 +26,19 @@ public class Animation {
 	
 	public void update() {
 		jPos += speed;
-		if (jPos > regions[0].length || jPos < 0) jPos = 0;
+	}
+
+	public void restart() {
+		jPos = 0;
 	}
 	
 	public Region getCurrentRegion() {
 		return regions[(int)iPos][(int)jPos];
+	}
+
+	public void setCurrentRegion(int i, int j) {
+		this.iPos = i;
+		this.jPos = j;
 	}
 
 	public Region[][] getRegions() {
@@ -39,14 +47,6 @@ public class Animation {
 
 	public void setRegions(Region[][] regions) {
 		this.regions = regions;
-	}
-
-	public int getFrames() {
-		return frames;
-	}
-
-	public void setFrames(int frames) {
-		this.frames = frames;
 	}
 
 	public float getSpeed() {
@@ -74,7 +74,6 @@ public class Animation {
 	}
 
 	public boolean isLastFrame() {
-		return jPos >= regions[0].length;
+		return (int)jPos == limit;
 	}
-
 }

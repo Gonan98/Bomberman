@@ -45,7 +45,7 @@ public class MyKeyAdapter extends KeyAdapter {
 
         default:
             break;
-    }
+        }
 	}
 	
 	@Override
@@ -61,6 +61,6 @@ public class MyKeyAdapter extends KeyAdapter {
 
         default:
             break;
-    }
+        }
 	}
 }

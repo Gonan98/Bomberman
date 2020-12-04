@@ -1,10 +1,11 @@
-package com.gonan.bomberman.collection;
+package com.gonan.bomberman.entity.collection;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.gonan.bomberman.entity.Bomb;
+import com.gonan.bomberman.entity.Bomb.BombState;
 
 public class BombList {
     
@@ -29,7 +30,7 @@ public class BombList {
     public void update() {
         for (Bomb b : bombs) {
             b.update();
-            if (b.getTimeToExplode() == 0) {
+            if (b.getState() == BombState.EXTICNT) {
                 bombs.remove(b);
                 break;
             }

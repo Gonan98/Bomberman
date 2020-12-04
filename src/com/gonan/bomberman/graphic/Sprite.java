@@ -92,6 +92,8 @@ public class Sprite {
 
 	public void setRegion(Region drawRegion) {
 		this.region = drawRegion;
+		this.w = this.region.getWidth() * GameConfig.scale;
+		this.h = this.region.getHeight() * GameConfig.scale;
 	}
 
 }

@@ -2,7 +2,7 @@ package com.gonan.bomberman.entity;
 
 import java.awt.Graphics2D;
 
-import com.gonan.bomberman.collection.BombList;
+import com.gonan.bomberman.entity.collection.BombList;
 import com.gonan.bomberman.graphic.Animation;
 import com.gonan.bomberman.graphic.Sprite;
 import com.gonan.bomberman.graphic.Texture;
@@ -16,11 +16,14 @@ public class Bomber extends Entity {
 	private State state;
 	private BombList bombList;
 	private Texture bombTexture;
+	private Texture explosionTexture;
 	
-	public Bomber(Texture playeTexture, Texture bombTexture, float x, float y) {
+	public Bomber(Texture playeTexture, Texture bombTexture, Texture explosionTexture, float x, float y) {
 		this.bombTexture = bombTexture;
+		this.explosionTexture = explosionTexture;
 		this.sprite = new Sprite(playeTexture, new Region(16,24,16,24), x, y);
 		this.animation = new Animation(16, 24, 4, 3, 0.2f);
+		this.animation.setCurrentRegion(1, 1);
 		this.direction = Direction.DOWN;
 		this.state = State.STILL;
 		this.speed = 8f;
@@ -28,7 +31,7 @@ public class Bomber extends Entity {
 	}
 
 	public void putBomb() {
-		bombList.add(new Bomb(bombTexture, sprite.getX(), sprite.getY()));
+		bombList.add(new Bomb(bombTexture, explosionTexture, sprite.getX(), sprite.getY()));
 	}
 
 	@Override
@@ -65,13 +68,14 @@ public class Bomber extends Entity {
 				break;
 			}
 			animation.update();
+			if (animation.isLastFrame()) animation.restart();
 		} else {
 			animation.setjPos(1);
+			//sprite.setRegion(animation.getCurrentRegion());
 		}
-		
-		if (sprite.getRegion() != animation.getCurrentRegion()) {
-			sprite.setRegion(animation.getCurrentRegion());
-		}
+
+		sprite.setRegion(animation.getCurrentRegion());
+	
 	}
 
 	public State getState() {
