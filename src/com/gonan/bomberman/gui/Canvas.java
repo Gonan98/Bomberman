@@ -11,10 +11,13 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import com.gonan.bomberman.entity.Bomber;
+import com.gonan.bomberman.entity.DestroyableBlock;
 import com.gonan.bomberman.entity.Enemy;
 import com.gonan.bomberman.graphic.Animation;
 import com.gonan.bomberman.graphic.Texture;
+import com.gonan.bomberman.graphic.Animation.AnimationType;
 import com.gonan.bomberman.input.MyKeyAdapter;
+import com.gonan.bomberman.scenario.Level;
 import com.gonan.bomberman.util.GameConfig;
 
 public class Canvas extends JPanel implements ActionListener {
@@ -26,9 +29,15 @@ public class Canvas extends JPanel implements ActionListener {
 	private Texture explosionTexture;
 	private Texture enemyTexture;
 	private Texture enemyTexture2;
+	private Texture firstLevelTexture;
+	private Texture blockTexture;
+	
 	private Enemy enemy;
 	private Enemy enemy2;
 	private Bomber player;
+	private Level level;
+	private DestroyableBlock block;
+	
 	private MyKeyAdapter myKeyAdapter;
 	private Timer timer;
 
@@ -41,10 +50,17 @@ public class Canvas extends JPanel implements ActionListener {
 		this.enemyTexture = new Texture("res/enemy1.png");
 		this.enemyTexture2 = new Texture("res/enemy2.png");
 		this.bombTexture = new Texture("res/bomberman_bomb.png");
-		this.explosionTexture = new Texture("res/bomb_explosion.png");
-		this.player = new Bomber(playerTexture, bombTexture, explosionTexture, 0, 0);
-		this.enemy = new Enemy(enemyTexture, new Animation(16, 24, 4, 4, 0.3f), 64, 64);
-		this.enemy2 = new Enemy(enemyTexture2, new Animation(16, 16, 1, 6, 0.3f), 128, 64);
+		this.explosionTexture = new Texture("res/central_explosion.png");
+		this.firstLevelTexture = new Texture("res/stage1.png"); 
+		this.blockTexture = new Texture("res/stage1_destroyable_block.png");
+		
+		this.player = new Bomber(playerTexture, bombTexture, explosionTexture, 48, 24);
+		this.enemy = new Enemy(enemyTexture, new Animation(16, 24, 4, 4, 0.5f, AnimationType.REPEAT), 64, 64);
+		this.enemy2 = new Enemy(enemyTexture2, new Animation(16, 16, 1, 6, 0.3f, AnimationType.BOOMERANG), 256, 64);
+		this.block = new DestroyableBlock(blockTexture, 256, 256);
+		
+		this.level = new Level(firstLevelTexture);
+		
 		this.timer = new Timer((int)(1000 / GameConfig.FPS), this);
 		this.myKeyAdapter = new MyKeyAdapter(player);
 		this.addKeyListener(myKeyAdapter);
@@ -57,9 +73,11 @@ public class Canvas extends JPanel implements ActionListener {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		level.renderBackground((Graphics2D)g);
 		player.render((Graphics2D)g);
 		enemy.render((Graphics2D)g);
 		enemy2.render((Graphics2D)g);
+		block.render((Graphics2D)g);
 	}
 
 	@Override
@@ -69,6 +87,7 @@ public class Canvas extends JPanel implements ActionListener {
 		player.update();
 		enemy.update();
 		enemy2.update();
+		block.update();
 
 		// Draw
 		repaint();

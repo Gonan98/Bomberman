@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 
 import com.gonan.bomberman.entity.collection.BombList;
 import com.gonan.bomberman.graphic.Animation;
+import com.gonan.bomberman.graphic.Animation.AnimationType;
 import com.gonan.bomberman.graphic.Sprite;
 import com.gonan.bomberman.graphic.Texture;
 import com.gonan.bomberman.util.Direction;
@@ -22,16 +23,16 @@ public class Bomber extends Entity {
 		this.bombTexture = bombTexture;
 		this.explosionTexture = explosionTexture;
 		this.sprite = new Sprite(playeTexture, new Region(16,24,16,24), x, y);
-		this.animation = new Animation(16, 24, 4, 3, 0.2f);
+		this.animation = new Animation(16, 24, 4, 3, 0.3f, AnimationType.BOOMERANG);
 		this.animation.setCurrentRegion(1, 1);
 		this.direction = Direction.DOWN;
 		this.state = State.STILL;
-		this.speed = 8f;
+		this.speed = 6f;
 		bombList = new BombList();
 	}
 
 	public void putBomb() {
-		bombList.add(new Bomb(bombTexture, explosionTexture, sprite.getX(), sprite.getY()));
+		bombList.add(new Bomb(bombTexture, explosionTexture, sprite.getX(), sprite.getY() + sprite.getH() / 3));
 	}
 
 	@Override
@@ -68,10 +69,8 @@ public class Bomber extends Entity {
 				break;
 			}
 			animation.update();
-			if (animation.isLastFrame()) animation.restart();
 		} else {
 			animation.setjPos(1);
-			//sprite.setRegion(animation.getCurrentRegion());
 		}
 
 		sprite.setRegion(animation.getCurrentRegion());

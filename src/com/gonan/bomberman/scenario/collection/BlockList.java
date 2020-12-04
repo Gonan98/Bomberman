@@ -3,28 +3,27 @@ package com.gonan.bomberman.scenario.collection;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gonan.bomberman.scenario.Block;
-import com.gonan.bomberman.scenario.Block.BlockType;
+import com.gonan.bomberman.entity.DestroyableBlock;
 
 import java.awt.Graphics2D;
 
 public class BlockList {
     
-    private List<Block> blocks;
+    private List<DestroyableBlock> blocks;
 
     public BlockList() {
         this.blocks = new ArrayList<>();
     }
 
     public void render(Graphics2D g) {
-        for (Block b : blocks) b.render(g);
+        for (DestroyableBlock b : blocks) b.render(g);
     }
 
-    public void add(Block b) {
+    public void add(DestroyableBlock b) {
         blocks.add(b);
     }
 
-    public void destroy(Block b) {
-        if (b.getType() == BlockType.DESTROYABLE) blocks.remove(b);
+    public boolean destroy(DestroyableBlock b) {
+        return blocks.remove(b);
     }
 }

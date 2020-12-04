@@ -23,8 +23,9 @@ public class Enemy extends Entity {
 
     @Override
     public void update() {
+    	//sprite.move(0, 4);
         animation.update();
-        if (animation.isLastFrame()) animation.restart();
+        //if (animation.isLastFrame()) animation.restart();
         sprite.setRegion(animation.getCurrentRegion());
     }
 

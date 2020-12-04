@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import com.gonan.bomberman.graphic.Animation;
 import com.gonan.bomberman.graphic.Sprite;
 import com.gonan.bomberman.graphic.Texture;
+import com.gonan.bomberman.graphic.Animation.AnimationType;
 import com.gonan.bomberman.util.Region;
 
 public class Bomb extends Entity {
@@ -18,7 +19,7 @@ public class Bomb extends Entity {
 	public Bomb(Texture bombTexture, Texture explosionTexture, float x, float y) {
 		this.explosion = new Explosion(explosionTexture, x, y);
 		this.sprite = new Sprite(bombTexture, new Region(0, 0, 16, 16), x, y);
-		this.animation = new Animation(16, 16, 1, 3, 0.1f);
+		this.animation = new Animation(16, 16, 1, 3, 0.2f, AnimationType.BOOMERANG);
 		this.timeToExplode = 2;
 		this.state = BombState.ACTIVE;
 	}
@@ -34,9 +35,9 @@ public class Bomb extends Entity {
 
 	@Override
 	public void update() {
+		//System.out.println(animation.getjPos());
 		if (state == BombState.ACTIVE) {
 			animation.update();
-			if(animation.isLastFrame()) animation.restart();
 			sprite.setRegion(animation.getCurrentRegion());
 			if (animation.getjPos() == 0) {
 				timeToExplode--;
@@ -44,7 +45,7 @@ public class Bomb extends Entity {
 			}
 		} else {
 			explosion.update();
-			if (explosion.getAnimation().isLastFrame()) state = BombState.EXTICNT;
+			if (explosion.getAnimation().isStopped()) state = BombState.EXTICNT;
 		}
 	}
 

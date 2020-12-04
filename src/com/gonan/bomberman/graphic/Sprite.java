@@ -15,13 +15,21 @@ public class Sprite {
 	private Texture texture;
 	private Region region;
 	
+	public Sprite(Texture texture) {
+		this.texture = texture;
+		this.x = 0;
+		this.y = 0;
+		this.w = texture.getWidth() * GameConfig.scale;
+		this.h = texture.getHeight() * GameConfig.scale;
+	}
+	
 	public Sprite(Texture texture, float x, float y) {
 		this.texture = texture;
 		this.region = new Region(0, 0, texture.getWidth(), texture.getHeight());
 		this.x = x;
 		this.y = y;
-		this.w = region.getWidth() * GameConfig.scale;
-		this.h = region.getHeight() * GameConfig.scale;
+		this.w = texture.getWidth() * GameConfig.scale;
+		this.h = texture.getHeight() * GameConfig.scale;
 	}
 	
 	public Sprite(Texture texture, Region region, float x, float y) {
@@ -35,6 +43,11 @@ public class Sprite {
 	
 	public BufferedImage getCurrentImage() {
 		return texture.getImage().getSubimage(region.getX(), region.getY(), region.getWidth(), region.getHeight());
+	}
+	
+	public void setPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	public void move(float xOffSet, float yOffSet) {
