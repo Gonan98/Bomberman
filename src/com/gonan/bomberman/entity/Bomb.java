@@ -3,10 +3,6 @@ package com.gonan.bomberman.entity;
 import java.awt.Graphics2D;
 
 import com.gonan.bomberman.graphic.Animation;
-import com.gonan.bomberman.graphic.Sprite;
-import com.gonan.bomberman.graphic.Texture;
-import com.gonan.bomberman.graphic.Animation.AnimationType;
-import com.gonan.bomberman.util.Region;
 
 public class Bomb extends Entity {
 	
@@ -16,10 +12,11 @@ public class Bomb extends Entity {
 	private BombState state;
 	private Explosion explosion;
 	
-	public Bomb(Texture bombTexture, Texture explosionTexture, float x, float y) {
-		this.explosion = new Explosion(explosionTexture, x, y);
-		this.sprite = new Sprite(bombTexture, new Region(0, 0, 16, 16), x, y);
-		this.animation = new Animation(16, 16, 1, 3, 0.2f, AnimationType.BOOMERANG);
+	public Bomb(Animation animation, Animation explosionAnimation, float x, float y) {
+		this.x = x;
+		this.y = y;
+		this.animation = animation;
+		this.explosion = new Explosion(explosionAnimation, x, y);
 		this.timeToExplode = 2;
 		this.state = BombState.ACTIVE;
 	}
@@ -27,7 +24,7 @@ public class Bomb extends Entity {
 	@Override
 	public void render(Graphics2D g) {
 		if (state == BombState.ACTIVE) {
-			sprite.render(g);
+			animation.getCurrentSprite().render(g);
 		} else {
 			explosion.render(g);
 		}
@@ -35,10 +32,9 @@ public class Bomb extends Entity {
 
 	@Override
 	public void update() {
-		//System.out.println(animation.getjPos());
 		if (state == BombState.ACTIVE) {
 			animation.update();
-			sprite.setRegion(animation.getCurrentRegion());
+			animation.getCurrentSprite().setPosition(x,y);
 			if (animation.getjPos() == 0) {
 				timeToExplode--;
 				if (timeToExplode == 0) state = BombState.EXPLODING;

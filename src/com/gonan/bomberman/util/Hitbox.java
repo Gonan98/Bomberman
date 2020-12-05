@@ -1,13 +1,13 @@
 package com.gonan.bomberman.util;
 
-public class Region {
+public class Hitbox {
 
 	private int x;
 	private int y;
 	private int width;
 	private int height;
 	
-	public Region(int x, int y, int width, int height) {
+	public Hitbox(int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;

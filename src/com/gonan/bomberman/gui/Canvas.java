@@ -32,6 +32,11 @@ public class Canvas extends JPanel implements ActionListener {
 	private Texture firstLevelTexture;
 	private Texture blockTexture;
 	
+	private Animation playerAnimation;
+	private Animation enemyAnimation;
+	private Animation enemy2Animation;
+	private Animation blockAnimation;
+	
 	private Enemy enemy;
 	private Enemy enemy2;
 	private Bomber player;
@@ -54,10 +59,15 @@ public class Canvas extends JPanel implements ActionListener {
 		this.firstLevelTexture = new Texture("res/stage1.png"); 
 		this.blockTexture = new Texture("res/stage1_destroyable_block.png");
 		
-		this.player = new Bomber(playerTexture, bombTexture, explosionTexture, 48, 24);
-		this.enemy = new Enemy(enemyTexture, new Animation(16, 24, 4, 4, 0.5f, AnimationType.REPEAT), 64, 64);
-		this.enemy2 = new Enemy(enemyTexture2, new Animation(16, 16, 1, 6, 0.3f, AnimationType.BOOMERANG), 256, 64);
-		this.block = new DestroyableBlock(blockTexture, 256, 256);
+		this.playerAnimation = new Animation(playerTexture, 4, 3, 0.3f, AnimationType.BOOMERANG);
+		this.enemyAnimation = new Animation(enemyTexture, 4, 4, 0.5f, AnimationType.REPEAT);
+		this.enemy2Animation = new Animation(enemyTexture2, 1, 6, 0.5f, AnimationType.BOOMERANG);
+		this.blockAnimation = new Animation(blockTexture, 1, 4, 0.3f, AnimationType.REPEAT);    
+		
+		this.player = new Bomber(playerAnimation, bombTexture, explosionTexture, 48, 24);
+		this.enemy = new Enemy(enemyAnimation, 64, 64);
+		this.enemy2 = new Enemy(enemy2Animation, 256, 64);
+		this.block = new DestroyableBlock(blockAnimation, 256, 256);
 		
 		this.level = new Level(firstLevelTexture);
 		

@@ -16,7 +16,7 @@ public class Level {
     public static final int COLUMNS = 15;
     
     public Level(Texture texture) {
-    	this.sprite = new Sprite(texture, 0, 0);
+    	this.sprite = new Sprite(texture);
     	//this.regions = new Region[ROWS][COLUMNS];
     	//this.borders = new Region[4];
     }

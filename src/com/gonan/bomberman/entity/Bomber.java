@@ -4,11 +4,9 @@ import java.awt.Graphics2D;
 
 import com.gonan.bomberman.entity.collection.BombList;
 import com.gonan.bomberman.graphic.Animation;
-import com.gonan.bomberman.graphic.Animation.AnimationType;
-import com.gonan.bomberman.graphic.Sprite;
 import com.gonan.bomberman.graphic.Texture;
+import com.gonan.bomberman.graphic.Animation.AnimationType;
 import com.gonan.bomberman.util.Direction;
-import com.gonan.bomberman.util.Region;
 
 public class Bomber extends Entity {
 	
@@ -19,25 +17,28 @@ public class Bomber extends Entity {
 	private Texture bombTexture;
 	private Texture explosionTexture;
 	
-	public Bomber(Texture playeTexture, Texture bombTexture, Texture explosionTexture, float x, float y) {
+	public Bomber(Animation playerAnimation, Texture bombTexture, Texture explosionTexture, float x, float y) {
+		this.x = x;
+		this.y = y;
+		this.animation = playerAnimation;
 		this.bombTexture = bombTexture;
 		this.explosionTexture = explosionTexture;
-		this.sprite = new Sprite(playeTexture, new Region(16,24,16,24), x, y);
-		this.animation = new Animation(16, 24, 4, 3, 0.3f, AnimationType.BOOMERANG);
-		this.animation.setCurrentRegion(1, 1);
 		this.direction = Direction.DOWN;
 		this.state = State.STILL;
 		this.speed = 6f;
-		bombList = new BombList();
+		this.bombList = new BombList();
+		this.animation.setCurrentSprite(1, 1);
 	}
 
 	public void putBomb() {
-		bombList.add(new Bomb(bombTexture, explosionTexture, sprite.getX(), sprite.getY() + sprite.getH() / 3));
+		Animation bombAnimation = new Animation(bombTexture, 1, 3, 0.15f, AnimationType.BOOMERANG);
+		Animation explosionAnimation = new Animation(explosionTexture, 1, 5, 0.5f, AnimationType.NON_REPEAT);
+		bombList.add(new Bomb(bombAnimation, explosionAnimation, animation.getCurrentSprite().getX(), animation.getCurrentSprite().getY() + animation.getCurrentSprite().getH() / 3));
 	}
 
 	@Override
 	public void render(Graphics2D g) {
-		sprite.render(g);
+		animation.getCurrentSprite().render(g);
 		bombList.render(g);
 	}
 
@@ -49,22 +50,22 @@ public class Bomber extends Entity {
 		if (state == State.MOVING) {
 			switch(direction) {
 			case UP:
-				sprite.move(0, -speed);
+				y -= speed;
 				animation.setiPos(0);
 				break;
 				
 			case DOWN:
-				sprite.move(0, speed);
+				y += speed;
 				animation.setiPos(1);
 				break;
 				
 			case RIGHT:
-				sprite.move(speed, 0);
+				x += speed;
 				animation.setiPos(2);
 				break;
 				
 			case LEFT:
-				sprite.move(-speed, 0);
+				x -= speed;
 				animation.setiPos(3);
 				break;
 			}
@@ -72,9 +73,8 @@ public class Bomber extends Entity {
 		} else {
 			animation.setjPos(1);
 		}
-
-		sprite.setRegion(animation.getCurrentRegion());
-	
+		
+		animation.getCurrentSprite().setPosition(x, y);
 	}
 
 	public State getState() {
