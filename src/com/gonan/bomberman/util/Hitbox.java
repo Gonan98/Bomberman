@@ -1,5 +1,7 @@
 package com.gonan.bomberman.util;
 
+import java.awt.Graphics2D;
+
 public class Hitbox {
 
 	private int x;
@@ -12,6 +14,22 @@ public class Hitbox {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+	}
+	
+	public void render(Graphics2D g) {
+		g.fillRect(x, y, width, height);
+	}
+	
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public boolean collide(Hitbox b) {
+		return (this.x < b.x + b.width &&
+				this.x + this.width > b.x &&
+				this.y < b.y + b.height &&
+				this.y + this.height > b.y);
 	}
 
 	public int getX() {

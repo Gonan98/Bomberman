@@ -25,11 +25,6 @@ public class Sprite {
 		this.y = y;
 	}
 	
-	//public void move(float xOffSet, float yOffSet) {
-	//	this.x += xOffSet;
-	//	this.y += yOffSet;
-	//}
-	
 	public void render(Graphics2D g) {
 		g.drawImage(texture.getImage(), (int)x, (int)y, (int)w, (int)h, null);
 	}

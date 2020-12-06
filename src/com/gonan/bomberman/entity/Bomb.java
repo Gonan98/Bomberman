@@ -41,7 +41,7 @@ public class Bomb extends Entity {
 			}
 		} else {
 			explosion.update();
-			if (explosion.getAnimation().isStopped()) state = BombState.EXTICNT;
+			if (explosion.getAnimation().hasStopped()) state = BombState.EXTICNT;
 		}
 	}
 

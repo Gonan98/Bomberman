@@ -59,9 +59,9 @@ public class Canvas extends JPanel implements ActionListener {
 		this.firstLevelTexture = new Texture("res/stage1.png"); 
 		this.blockTexture = new Texture("res/stage1_destroyable_block.png");
 		
-		this.playerAnimation = new Animation(playerTexture, 4, 3, 0.3f, AnimationType.BOOMERANG);
+		this.playerAnimation = new Animation(playerTexture, 4, 3, 0.2f, AnimationType.BOOMERANG);
 		this.enemyAnimation = new Animation(enemyTexture, 4, 4, 0.5f, AnimationType.REPEAT);
-		this.enemy2Animation = new Animation(enemyTexture2, 1, 6, 0.5f, AnimationType.BOOMERANG);
+		this.enemy2Animation = new Animation(enemyTexture2, 1, 6, 0.3f, AnimationType.BOOMERANG);
 		this.blockAnimation = new Animation(blockTexture, 1, 4, 0.3f, AnimationType.REPEAT);    
 		
 		this.player = new Bomber(playerAnimation, bombTexture, explosionTexture, 48, 24);

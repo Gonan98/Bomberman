@@ -40,6 +40,7 @@ public class Bomber extends Entity {
 	public void render(Graphics2D g) {
 		animation.getCurrentSprite().render(g);
 		bombList.render(g);
+		//hitbox.render(g);
 	}
 
 	@Override
@@ -75,6 +76,7 @@ public class Bomber extends Entity {
 		}
 		
 		animation.getCurrentSprite().setPosition(x, y);
+		//hitbox.setPosition((int)x, (int)y);
 	}
 
 	public State getState() {

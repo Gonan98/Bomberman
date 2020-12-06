@@ -9,7 +9,7 @@ public class Animation {
 	private float i;
 	private float j;
 	private float speed;
-	private boolean stopped;
+	private boolean stop;
 	
 	public Animation(Texture texture, int rows, int columns, float speed, AnimationType type) {
 		this.spriteSheet = new SpriteSheet(texture, rows, columns);
@@ -17,28 +17,35 @@ public class Animation {
 		this.i = 0;		
 		this.j = 0;
 		this.type = type;
-		this.stopped = false;
-		
+		this.stop = false;
 	}
 	
 	public void update() {
-		if (!stopped) {
+		if (!stop) {
 			
 			j += speed;
 			
-			if (type == AnimationType.BOOMERANG && animationEnd()) {
+			switch (type) {
+			case NON_REPEAT:
+				if (animationEnd()) {
+					stop = true;
+					j = spriteSheet.getColumns() - 1;
+				}
+				break;
 				
-				speed *= -1;
-				if ((int)j == 0) j = 0;
+			case REPEAT:
+				if (animationEnd()) j = 0;
+				break;
 				
-			} else if (type == AnimationType.REPEAT && animationEnd()) {
+			case BOOMERANG:
+				if (animationEnd()) {
+					speed *= -1;
+					j = (int)j;
+				}
+				break;
 				
-				j = 0;
-				
-			} else if (type == AnimationType.NON_REPEAT && animationEnd()) {
-				
-				stopped = true;
-				
+			default:
+				break;
 			}
 		}
 	}
@@ -53,7 +60,7 @@ public class Animation {
 	}
 	
 	private boolean animationEnd() {
-		return j + speed >= spriteSheet.getColumns() || j + speed < 0;
+		return j + speed >= spriteSheet.getColumns() || j  + speed < 0;
 	}
 
 	public SpriteSheet getSpriteSheet() {
@@ -84,12 +91,12 @@ public class Animation {
 		this.j = jPos;
 	}
 
-	public boolean isStopped() {
-		return stopped;
+	public boolean hasStopped() {
+		return stop;
 	}
 
-	public void setStopped(boolean stopped) {
-		this.stopped = stopped;
+	public void setStop(boolean stop) {
+		this.stop = stop;
 	}
 
 	public AnimationType getType() {
